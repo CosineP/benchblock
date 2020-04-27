@@ -1,15 +1,14 @@
+use benchblock::FETCH;
 use reqwest::get;
 use std::env;
 
-const FETCH: &'static str = "https://steven-universe.fandom.com/wiki/Steven_Universe:_The_Movie/Transcript";
-
 async fn fetch_it() -> Result<(), reqwest::Error> {
-    // don't use client, HTTP keep-alive pooling is not fair to blocking version
-    get(FETCH).await?.text().await?;
+    // don't use client, HTTP keep-alive is not fair to blocking version
+    get(FETCH).await?.bytes().await?;
     Ok(())
 }
 
-// cargo run <n: threads = fetches>
+// cargo run <n: fetches>
 #[tokio::main]
 async fn main() -> Result<(), reqwest::Error> {
     let mut args = env::args();

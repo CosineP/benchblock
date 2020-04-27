@@ -1,12 +1,11 @@
+use benchblock::FETCH;
 use reqwest::blocking::get;
 use std::env;
 use std::thread;
 
-const FETCH: &'static str = "https://steven-universe.fandom.com/wiki/Steven_Universe:_The_Movie/Transcript";
-
 fn fetch_it() -> Result<(), reqwest::Error> {
     let res = get(FETCH)?;
-    res.text()?;
+    res.bytes()?;
     Ok(())
 }
 
