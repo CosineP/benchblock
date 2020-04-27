@@ -14,12 +14,12 @@ run() {
 # make sure we're all built up
 cargo build --release --workspace
 
-echo "block kernel,block user,async kernel,async user"
+echo "size,block kernel,block user,async kernel,async user"
 for size in $sizes; do
     # time does annoying newline stuff
     block_entry=`run block`
     async_entry=`run async`
     # csv = ezpz
-    echo "$block_entry,$async_entry"
+    echo "$size,$block_entry,$async_entry"
 done
 
