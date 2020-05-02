@@ -8,13 +8,13 @@ sizes="1
 
 run() {
     # head = strip newline
-    /usr/bin/time -f "%S,%U" 2>&1 cargo run -q --release --bin $1 -- $size | head -c -1
+    /usr/bin/time -f "%e,%S,%U" 2>&1 cargo run -q --release --bin $1 -- $size | head -c -1
 }
 
 # make sure we're all built up
 cargo build --release --workspace
 
-echo "size,block kernel,block user,async kernel,async user"
+echo "size,blocking (wall time),blocking (kernel time),blocking (user time),async (wall time),async (kernel time),async (user time)"
 for size in $sizes; do
     # time does annoying newline stuff
     block_entry=`run block`
