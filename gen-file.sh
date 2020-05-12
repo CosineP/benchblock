@@ -1,2 +1,1 @@
-size=100000
-yes 'everything is everything a cigarette for a wedding ring' | head -n $size > to-read.txt
+yes 'everything is everything a cigarette for a wedding ring' | head -n $1 > to-read.txt

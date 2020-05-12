@@ -1,10 +1,15 @@
 use benchblock::TO_READ;
 use std::env;
-use tokio::fs::read_to_string;
-use tokio::io::Result;
+use tokio::fs::File;
+use tokio::io::{Result, AsyncReadExt};
 
 async fn read_it() -> Result<()> {
-    read_to_string(TO_READ).await?;
+    // to avoid O(n) CPU read_to_string due to UTF-8
+    let mut file = File::open(TO_READ).await?;
+    let mut contents = vec![];
+    file.read_to_end(&mut contents).await?;
+    // adding this to be fair to block
+    println!("{}", contents.len());
     Ok(())
 }
 

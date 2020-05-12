@@ -1,24 +1,26 @@
+#!/bin/bash
+
 set +x
 
-sizes="1
-10
-100
-1000
-10000"
-
-run() {
+do_time() {
     # head = strip newline
-    /usr/bin/time -f "%e,%S,%U" 2>&1 cargo run -q --release --bin $1 -- $size | head -c -1
+    /usr/bin/time -f "%e,%S,%U" 2>&1 ./run.sh $1 $size | head -c -1
 }
 
 # make sure we're all built up
 cargo build --release --workspace
 
-echo "size,blocking (wall time),blocking (kernel time),blocking (user time),async (wall time),async (kernel time),async (user time)"
-for size in $sizes; do
-    # time does annoying newline stuff
-    block_entry=`run block`
-    async_entry=`run async`
+if [ -n "$1" ]; then
+    ./gen-file.sh $1
+fi
+
+echo "size,blocking (seconds),blocking (kernel time),blocking (user time),async (seconds),async (kernel time),async (user time)"
+interval=1000
+max=10000
+#for size in {$interval..$max..$interval}; do
+for size in {1000..10000..1000}; do
+    block_entry=`do_time block`
+    async_entry=`do_time async`
     # csv = ezpz
     echo "$size,$block_entry,$async_entry"
 done
